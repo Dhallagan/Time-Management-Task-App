@@ -119,108 +119,12 @@ export default {
       return format(new Date(date), "MMM dd");
     },
   },
-
+  props: {
+    projects: Array,
+  },
   data() {
     return {
       format,
-      projects: [
-        {
-          name: "Willow",
-          arrBackLog: [
-            {
-              name: "Code Sign Up Page",
-              priority: "Important",
-              urgency: "Not Urgent",
-              deadline: "02/11/2021",
-              created: "01/24/2021",
-            },
-            {
-              name: "Test Dashboard",
-              priority: "Important",
-              urgency: "Not Urgent",
-              deadline: "02/13/2021",
-              created: "01/24/2021",
-            },
-            {
-              name: "Style Registration",
-              priority: "Not Important",
-              urgency: "Not Urgent",
-              deadline: "02/14/2021",
-              created: "01/25/2021",
-            },
-            {
-              name: "Help with Designs",
-              priority: "Not Important",
-              urgency: "Not Urgent",
-              deadline: "02/18/2021",
-              created: "01/24/2021",
-            },
-          ],
-          arrInProgress: [],
-          arrTested: [],
-          arrDone: [
-            {
-              name: "Add tracker to Invoice View",
-              priority: "Important",
-              urgency: "Urgent",
-              deadline: "02/17/2021",
-              created: "01/20/2021",
-            },
-          ],
-        },
-        {
-          name: "Ad Hoc",
-          arrBackLog: [
-            {
-              name: "Fix formating on Lior Report",
-              priority: "Important",
-              urgency: "Not Urgent",
-              deadline: "02/28/2021",
-              created: "02/04/2021",
-            },
-            {
-              name: "Update Account Analysis for New Year",
-              priority: "Important",
-              urgency: "Urgent",
-              deadline: "02/11/2021",
-              created: "02/09/2021",
-            },
-            {
-              name: "MaCabe Report",
-              priority: "Important",
-              urgency: "Urgent",
-              deadline: "02/12/2021",
-              created: "01/20/2021",
-            },
-          ],
-          arrInProgress: [],
-          arrTested: [],
-          arrDone: [],
-        },
-        {
-          name: "MEAE",
-          arrBackLog: [
-            {
-              name: "Add Groll to ATS exception FIUpload routine ",
-              priority: "Important",
-              urgency: "Not Urgent",
-              deadline: "02/11/2021",
-              created: "01/20/2021",
-            },
-          ],
-          arrInProgress: [],
-          arrTested: [],
-          arrDone: [
-            {
-              name: "SOEBB",
-              priority: "Important",
-              urgency: "Not Urgent",
-              deadline: "02/10/2021",
-              created: "01/20/2021",
-            },
-          ],
-        },
-      ],
       newTask: "",
       // 4 arrays to keep track of our 4 statuses
     };
