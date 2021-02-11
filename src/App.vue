@@ -1,8 +1,8 @@
 <template>
   <div id="app">
-    <b-navbar toggleable="md" type="dark" variant="info">
-      <b-navbar-brand href="#">Que</b-navbar-brand>
-    </b-navbar>
+    <!-- <b-navbar toggleable="md" type="dark" variant="">
+      <b-navbar-brand href="#" class="primary">Que</b-navbar-brand>
+    </b-navbar> -->
     <div class="container">
       <div class="row mt-4">
         <div class="col-12">
@@ -30,7 +30,7 @@
                   d="M2.5 11.5A.5.5 0 0 1 3 11h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4A.5.5 0 0 1 3 7h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4A.5.5 0 0 1 3 3h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5z"
                 />
               </svg>
-              List
+              Queue
             </button>
             <button
               type="button"
@@ -90,37 +90,37 @@ export default {
         {
           name: "Willow",
           arrBackLog: [
-            {
-              name: "Code Sign Up Page",
-              priority: "Important",
-              urgency: "Not Urgent",
-              deadline: "02/11/2021",
-              created: "01/24/2021",
-            },
-            {
-              name: "Test Dashboard",
-              priority: "Important",
-              urgency: "Not Urgent",
-              deadline: "02/13/2021",
-              created: "01/24/2021",
-            },
-            {
-              name: "Style Registration",
-              priority: "Not Important",
-              urgency: "Not Urgent",
-              deadline: "02/14/2021",
-              created: "01/25/2021",
-            },
-            {
-              name: "Help with Designs",
-              priority: "Not Important",
-              urgency: "Not Urgent",
-              deadline: "02/18/2021",
-              created: "01/24/2021",
-            },
+            // {
+            //   name: "Code Sign Up Page",
+            //   priority: "Important",
+            //   urgency: "Not Urgent",
+            //   deadline: "02/11/2021",
+            //   created: "01/24/2021",
+            // },
+            // {
+            //   name: "Test Dashboard",
+            //   priority: "Important",
+            //   urgency: "Not Urgent",
+            //   deadline: "02/13/2021",
+            //   created: "01/24/2021",
+            // },
+            // {
+            //   name: "Style Registration",
+            //   priority: "Not Important",
+            //   urgency: "Not Urgent",
+            //   deadline: "02/14/2021",
+            //   created: "01/25/2021",
+            // },
+            // {
+            //   name: "Help with Designs",
+            //   priority: "Not Important",
+            //   urgency: "Not Urgent",
+            //   deadline: "02/18/2021",
+            //   created: "01/24/2021",
+            // },
           ],
           arrInProgress: [],
-          arrTested: [],
+          arrNeedHelp: [],
           arrDone: [
             {
               name: "Add tracker to Invoice View",
@@ -128,6 +128,7 @@ export default {
               urgency: "Urgent",
               deadline: "02/17/2021",
               created: "01/20/2021",
+              assignee: "Emily",
             },
           ],
         },
@@ -135,11 +136,58 @@ export default {
           name: "Ad Hoc",
           arrBackLog: [
             {
+              name: "Add links to Actportal",
+              priority: "Important",
+              urgency: "Not Urgent",
+              deadline: "02/12/2021",
+              created: "02/05/2021",
+              assignee: "Dylan",
+            },
+            {
               name: "Fix formating on Lior Report",
               priority: "Important",
               urgency: "Not Urgent",
-              deadline: "02/28/2021",
-              created: "02/04/2021",
+              deadline: "02/20/2021",
+              created: "02/11/2021",
+              assignee: "Emily",
+            },
+
+            {
+              name: "Rerun timekeepers for Alissa",
+              priority: "Important",
+              urgency: "Not Urgent",
+              deadline: "02/11/2021",
+              created: "02/11/2021",
+              assignee: "Richard",
+            },
+          ],
+          arrInProgress: [
+            {
+              name: "KR Report for Matt",
+              priority: "Important",
+              urgency: "Urgent",
+              deadline: "02/12/2021",
+              created: "02/12/2021",
+              assignee: "Richard",
+            },
+          ],
+          arrNeedHelp: [],
+          arrDone: [
+            {
+              name: "Add JR to Credit",
+              priority: "Important",
+              urgency: "Not Urgent",
+              deadline: "02/11/2021",
+              created: "02/11/2021",
+              assignee: "Emily",
+            },
+            {
+              name: "McCabe Report",
+              priority: "Important",
+              urgency: "Urgent",
+              deadline: "02/12/2021",
+              created: "02/11/2021",
+              assignee: "Dylan",
             },
             {
               name: "Update Account Analysis for New Year",
@@ -147,18 +195,17 @@ export default {
               urgency: "Urgent",
               deadline: "02/11/2021",
               created: "02/09/2021",
+              assignee: "Paul",
             },
             {
-              name: "MaCabe Report",
+              name: "Natixis rerun for Kimberly",
               priority: "Important",
-              urgency: "Urgent",
-              deadline: "02/12/2021",
-              created: "01/20/2021",
+              urgency: "Not Urgent",
+              deadline: "02/11/2021",
+              created: "02/11/2021",
+              assignee: "Dylan",
             },
           ],
-          arrInProgress: [],
-          arrTested: [],
-          arrDone: [],
         },
         {
           name: "MEAE",
@@ -169,10 +216,11 @@ export default {
               urgency: "Not Urgent",
               deadline: "02/11/2021",
               created: "01/20/2021",
+              assignee: "Dylan",
             },
           ],
           arrInProgress: [],
-          arrTested: [],
+          arrNeedHelp: [],
           arrDone: [
             {
               name: "SOEBB",
@@ -180,6 +228,7 @@ export default {
               urgency: "Not Urgent",
               deadline: "02/10/2021",
               created: "01/20/2021",
+              assignee: "Dylan",
             },
           ],
         },
