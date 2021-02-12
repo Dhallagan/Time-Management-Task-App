@@ -43,8 +43,10 @@
 import { mapGetters } from "vuex";
 import TaskBoard from "./pages/TaskBoard";
 import TaskList from "./pages/TaskList";
-import KanBanIcon from "./components/IconKanBan";
-import QueueIcon from "./components/IconQueue";
+import KanBanIcon from "./components/icons/KanBan";
+import QueueIcon from "./components/icons/Queue";
+import { FETCH_PROJECTS } from "@/store/actions.types";
+
 export default {
   name: "App",
   components: {
@@ -52,6 +54,9 @@ export default {
     TaskList,
     KanBanIcon,
     QueueIcon,
+  },
+  mounted() {
+    this.$store.dispatch(FETCH_PROJECTS);
   },
   computed: {
     ...mapGetters(["projects"]),
