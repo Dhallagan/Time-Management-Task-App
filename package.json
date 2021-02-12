@@ -16,7 +16,8 @@
     "bootstrap-vue": "latest",
     "date-fns": "2.17.0",
     "vue": "^2.5.2",
-    "vuedraggable": "2.24.3"
+    "vuedraggable": "2.24.3",
+    "vuex": "3.6.2"
   },
   "devDependencies": {
     "autoprefixer": "^7.1.2",

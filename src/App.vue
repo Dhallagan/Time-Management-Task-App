@@ -17,19 +17,7 @@
               :class="{ active: this.view == 'list' }"
               @click="toggleView"
             >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="16"
-                height="16"
-                fill="currentColor"
-                class="bi bi-list"
-                viewBox="0 0 16 16"
-              >
-                <path
-                  fill-rule="evenodd"
-                  d="M2.5 11.5A.5.5 0 0 1 3 11h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4A.5.5 0 0 1 3 7h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4A.5.5 0 0 1 3 3h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5z"
-                />
-              </svg>
+              <QueueIcon />
               Queue
             </button>
             <button
@@ -38,44 +26,38 @@
               :class="{ active: this.view == 'kanban' }"
               @click="toggleView"
             >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="16"
-                height="16"
-                fill="currentColor"
-                class="bi bi-kanban"
-                viewBox="0 0 16 16"
-              >
-                <path
-                  d="M13.5 1a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1h-11a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1h11zm-11-1a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2h-11z"
-                />
-                <path
-                  d="M6.5 3a1 1 0 0 1 1-1h1a1 1 0 0 1 1 1v3a1 1 0 0 1-1 1h-1a1 1 0 0 1-1-1V3zm-4 0a1 1 0 0 1 1-1h1a1 1 0 0 1 1 1v7a1 1 0 0 1-1 1h-1a1 1 0 0 1-1-1V3zm8 0a1 1 0 0 1 1-1h1a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1h-1a1 1 0 0 1-1-1V3z"
-                />
-              </svg>
+              <KanBanIcon />
               Kan Ban
             </button>
           </div>
         </div>
       </div>
     </div>
+
     <TaskList :projects="this.projects" v-if="this.view === 'list'" />
     <TaskBoard :projects="this.projects" v-if="this.view === 'kanban'" />
   </div>
 </template>
 
 <script>
+import { mapGetters } from "vuex";
 import TaskBoard from "./pages/TaskBoard";
 import TaskList from "./pages/TaskList";
-
+import KanBanIcon from "./components/IconKanBan";
+import QueueIcon from "./components/IconQueue";
 export default {
   name: "App",
   components: {
     TaskBoard,
     TaskList,
+    KanBanIcon,
+    QueueIcon,
+  },
+  computed: {
+    ...mapGetters(["projects"]),
   },
   methods: {
-    toggleView: function () {
+    toggleView() {
       if (this.view === "list") {
         this.view = "kanban";
       } else if (this.view === "kanban") {
@@ -86,153 +68,6 @@ export default {
   data() {
     return {
       view: "list",
-      projects: [
-        {
-          name: "Willow",
-          arrBackLog: [
-            // {
-            //   name: "Code Sign Up Page",
-            //   priority: "Important",
-            //   urgency: "Not Urgent",
-            //   deadline: "02/11/2021",
-            //   created: "01/24/2021",
-            // },
-            // {
-            //   name: "Test Dashboard",
-            //   priority: "Important",
-            //   urgency: "Not Urgent",
-            //   deadline: "02/13/2021",
-            //   created: "01/24/2021",
-            // },
-            // {
-            //   name: "Style Registration",
-            //   priority: "Not Important",
-            //   urgency: "Not Urgent",
-            //   deadline: "02/14/2021",
-            //   created: "01/25/2021",
-            // },
-            // {
-            //   name: "Help with Designs",
-            //   priority: "Not Important",
-            //   urgency: "Not Urgent",
-            //   deadline: "02/18/2021",
-            //   created: "01/24/2021",
-            // },
-          ],
-          arrInProgress: [],
-          arrNeedHelp: [],
-          arrDone: [
-            {
-              name: "Add tracker to Invoice View",
-              priority: "Important",
-              urgency: "Urgent",
-              deadline: "02/17/2021",
-              created: "01/20/2021",
-              assignee: "Emily",
-            },
-          ],
-        },
-        {
-          name: "Ad Hoc",
-          arrBackLog: [
-            {
-              name: "Add links to Actportal",
-              priority: "Important",
-              urgency: "Not Urgent",
-              deadline: "02/12/2021",
-              created: "02/05/2021",
-              assignee: "Dylan",
-            },
-            {
-              name: "Fix formating on Lior Report",
-              priority: "Important",
-              urgency: "Not Urgent",
-              deadline: "02/20/2021",
-              created: "02/11/2021",
-              assignee: "Emily",
-            },
-
-            {
-              name: "Rerun timekeepers for Alissa",
-              priority: "Important",
-              urgency: "Not Urgent",
-              deadline: "02/11/2021",
-              created: "02/11/2021",
-              assignee: "Richard",
-            },
-          ],
-          arrInProgress: [
-            {
-              name: "KR Report for Matt",
-              priority: "Important",
-              urgency: "Urgent",
-              deadline: "02/12/2021",
-              created: "02/12/2021",
-              assignee: "Richard",
-            },
-          ],
-          arrNeedHelp: [],
-          arrDone: [
-            {
-              name: "Add JR to Credit",
-              priority: "Important",
-              urgency: "Not Urgent",
-              deadline: "02/11/2021",
-              created: "02/11/2021",
-              assignee: "Emily",
-            },
-            {
-              name: "McCabe Report",
-              priority: "Important",
-              urgency: "Urgent",
-              deadline: "02/12/2021",
-              created: "02/11/2021",
-              assignee: "Dylan",
-            },
-            {
-              name: "Update Account Analysis for New Year",
-              priority: "Important",
-              urgency: "Urgent",
-              deadline: "02/11/2021",
-              created: "02/09/2021",
-              assignee: "Paul",
-            },
-            {
-              name: "Natixis rerun for Kimberly",
-              priority: "Important",
-              urgency: "Not Urgent",
-              deadline: "02/11/2021",
-              created: "02/11/2021",
-              assignee: "Dylan",
-            },
-          ],
-        },
-        {
-          name: "MEAE",
-          arrBackLog: [
-            {
-              name: "Add Groll to ATS exception FIUpload routine ",
-              priority: "Important",
-              urgency: "Not Urgent",
-              deadline: "02/11/2021",
-              created: "01/20/2021",
-              assignee: "Dylan",
-            },
-          ],
-          arrInProgress: [],
-          arrNeedHelp: [],
-          arrDone: [
-            {
-              name: "SOEBB",
-              priority: "Important",
-              urgency: "Not Urgent",
-              deadline: "02/10/2021",
-              created: "01/20/2021",
-              assignee: "Dylan",
-            },
-          ],
-        },
-      ],
     };
   },
 };
