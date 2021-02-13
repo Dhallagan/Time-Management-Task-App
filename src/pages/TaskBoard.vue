@@ -1,18 +1,93 @@
 <template>
   <div class="container mt-5">
+    <b-modal id="add-task-modal" title="New Task" @ok="handleAddTask()">
+      <form ref="form" @submit.stop.prevent="handleSubmit">
+        <b-form-group
+          label-for="name-input"
+          invalid-feedback="Name is required"
+        >
+          <b-form-input
+            id="name-input"
+            v-model="newTask.name"
+            placeholder="New Task"
+            required
+          ></b-form-input>
+        </b-form-group>
+
+        <b-form-textarea
+          id="textarea"
+          v-model="newTask.notes"
+          placeholder="Notes"
+          rows="3"
+          max-rows="6"
+        ></b-form-textarea>
+
+        <b-form-group label="Prority">
+          <b-form-checkbox
+            id="checkbox-1"
+            v-model="newTask.urgency"
+            name="checkbox-1"
+            value="Urgent"
+            unchecked-value="Not Urgent"
+            inline
+            >Urgent</b-form-checkbox
+          >
+
+          <b-form-checkbox
+            id="checkbox-2"
+            v-model="newTask.importance"
+            name="checkbox-2"
+            value="Important"
+            unchecked-value="Not Important"
+            inline
+            >Important</b-form-checkbox
+          >
+        </b-form-group>
+
+        <!-- <b-form-group label="Importance">
+          <b-form-checkbox-group
+            id="checkbox-group-1"
+            v-model="newTask.urgency"
+            :options="['Urgent', 'Important']"
+            button
+          ></b-form-checkbox-group>
+        </b-form-group> -->
+
+        <label for="example-datepicker">Deadline</label>
+        <b-form-datepicker
+          id="example-datepicker"
+          v-model="newTask.deadline"
+          placeholder="When"
+          today-button
+          :date-format-options="{
+            year: undefined,
+            month: 'short',
+            day: '2-digit',
+          }"
+          class="mb-2"
+        ></b-form-datepicker>
+      </form>
+    </b-modal>
+
     <div class="row">
       <div class="col">
         <h1>Task Board</h1>
       </div>
     </div>
 
-    <div class="row mt-5" v-for="project in projects" :key="project.name">
-      <div class="col-12 border-bottom">
+    <div class="row mt-2" v-for="project in projects" :key="project.id">
+      <div class="col-12">
+        <span class="float-right">
+          <PlusIcon
+            v-b-modal.add-task-modal
+            @click.native="selectedProject = project.id"
+          />
+        </span>
         <h2>{{ project.name }}</h2>
 
-        <div class="row mt-5 ml-5">
-          <div class="col-3">
-            <div class="p-2 alert alert-secondary">
+        <div class="row mt-2 ml-5">
+          <div class="col-sm-12 col-lg-3 border-left">
+            <div class="p-2 alert alert-secondary bg-light">
               <h3>Back Log</h3>
 
               <draggable
@@ -22,50 +97,47 @@
               >
                 <div
                   class="list-group-item"
-                  v-for="backlog in project.arrBackLog"
-                  :key="backlog.name"
+                  v-for="task in project.arrBackLog"
+                  :key="task.name"
                 >
-                  {{ backlog.name }}
-
+                  {{ task.name }}
+                  <RemoveIcon
+                    class="icon"
+                    @click.native="handleDeleteTask(task.id)"
+                  />
                   <div class="row">
                     <div class="col-12">
                       <span class="badge badge-secondary mr-1">{{
-                        backlog.urgency
+                        task.urgency
                       }}</span>
 
                       <span class="badge badge-secondary">{{
-                        backlog.priority
+                        task.importance
                       }}</span>
 
                       <span class="ml-1 float-right">
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          width="16"
-                          height="16"
-                          fill="currentColor"
-                          class="bi bi-clock"
-                          viewBox="0 0 16 16"
-                        >
-                          <path
-                            d="M8 3.5a.5.5 0 0 0-1 0V9a.5.5 0 0 0 .252.434l3.5 2a.5.5 0 0 0 .496-.868L8 8.71V3.5z"
-                          />
-                          <path
-                            d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16zm7-8A7 7 0 1 1 1 8a7 7 0 0 1 14 0z"
-                          />
-                        </svg>
-                        {{ formatDate(backlog.deadline) }}
+                        <ClockIcon />
+                        {{ formatDate(task.deadline) }}
                       </span>
                     </div>
+
+                    <!-- <div class="row">
+                      <div class="col-12">
+                        <button @click="handleDeleteTask(task.id)">
+                          Delete
+                        </button>
+                      </div>
+                    </div> -->
                   </div>
                 </div>
               </draggable>
             </div>
           </div>
 
-          <div class="col-3">
-            <div class="p-2 alert alert-warning">
+          <div class="col-sm-12 col-lg-3 border-left">
+            <div class="p-2 alert bg-warning">
               <h3>In Progress</h3>
-              <!-- In Progress draggable component. Pass arrInProgress to list prop -->
+
               <draggable
                 class="list-group kanban-column"
                 :list="project.arrInProgress"
@@ -73,38 +145,27 @@
               >
                 <div
                   class="list-group-item"
-                  v-for="element in project.arrInProgress"
-                  :key="element.name"
+                  v-for="task in project.arrInProgress"
+                  :key="task.name"
                 >
-                  {{ element.name }}
-
+                  {{ task.name }}
+                  <RemoveIcon
+                    class="icon"
+                    @click.native="handleDeleteTask(task.id)"
+                  />
                   <div class="row">
                     <div class="col-12">
                       <span class="badge badge-secondary mr-1">{{
-                        element.urgency
+                        task.urgency
                       }}</span>
 
                       <span class="badge badge-secondary">{{
-                        element.priority
+                        task.importance
                       }}</span>
 
                       <span class="ml-1 float-right">
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          width="16"
-                          height="16"
-                          fill="currentColor"
-                          class="bi bi-clock"
-                          viewBox="0 0 16 16"
-                        >
-                          <path
-                            d="M8 3.5a.5.5 0 0 0-1 0V9a.5.5 0 0 0 .252.434l3.5 2a.5.5 0 0 0 .496-.868L8 8.71V3.5z"
-                          />
-                          <path
-                            d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16zm7-8A7 7 0 1 1 1 8a7 7 0 0 1 14 0z"
-                          />
-                        </svg>
-                        {{ formatDate(element.deadline) }}
+                        <ClockIcon />
+                        {{ formatDate(task.deadline) }}
                       </span>
                     </div>
                   </div>
@@ -113,9 +174,9 @@
             </div>
           </div>
 
-          <div class="col-3">
-            <div class="p-2 alert alert-danger">
-              <h3>Need Help</h3>
+          <div class="col-sm-12 col-lg-3 border-left">
+            <div class="p-2 alert alert-danger bg-danger">
+              <h3>Stuck</h3>
               <!-- In Progress draggable component. Pass arrInProgress to list prop -->
               <draggable
                 class="list-group kanban-column"
@@ -124,38 +185,27 @@
               >
                 <div
                   class="list-group-item"
-                  v-for="element in project.arrNeedHelp"
-                  :key="element.name"
+                  v-for="task in project.arrNeedHelp"
+                  :key="task.name"
                 >
-                  {{ element.name }}
-
+                  {{ task.name }}
+                  <RemoveIcon
+                    class="icon"
+                    @click.native="handleDeleteTask(task.id)"
+                  />
                   <div class="row">
                     <div class="col-12">
                       <span class="badge badge-secondary mr-1">{{
-                        element.urgency
+                        task.urgency
                       }}</span>
 
                       <span class="badge badge-secondary">{{
-                        element.priority
+                        task.importance
                       }}</span>
 
                       <span class="ml-1 float-right">
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          width="16"
-                          height="16"
-                          fill="currentColor"
-                          class="bi bi-clock"
-                          viewBox="0 0 16 16"
-                        >
-                          <path
-                            d="M8 3.5a.5.5 0 0 0-1 0V9a.5.5 0 0 0 .252.434l3.5 2a.5.5 0 0 0 .496-.868L8 8.71V3.5z"
-                          />
-                          <path
-                            d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16zm7-8A7 7 0 1 1 1 8a7 7 0 0 1 14 0z"
-                          />
-                        </svg>
-                        {{ formatDate(element.deadline) }}
+                        <ClockIcon />
+                        {{ formatDate(task.deadline) }}
                       </span>
                     </div>
                   </div>
@@ -164,8 +214,8 @@
             </div>
           </div>
 
-          <div class="col-3">
-            <div class="p-2 alert alert-success">
+          <div class="col-sm-12 col-lg-3 border-left">
+            <div class="p-2 alert bg-success">
               <h3>Done</h3>
               <!-- Testing draggable component. Pass arrNeedHelp to list prop -->
               <draggable
@@ -175,38 +225,27 @@
               >
                 <div
                   class="list-group-item"
-                  v-for="element in project.arrDone"
-                  :key="element.name"
+                  v-for="task in project.arrDone"
+                  :key="task.name"
                 >
-                  {{ element.name }}
-
+                  {{ task.name }}
+                  <RemoveIcon
+                    class="icon"
+                    @click.native="handleDeleteTask(task.id)"
+                  />
                   <div class="row">
                     <div class="col-12">
                       <span class="badge badge-secondary mr-1">{{
-                        element.urgency
+                        task.urgency
                       }}</span>
 
                       <span class="badge badge-secondary">{{
-                        element.priority
+                        task.importance
                       }}</span>
 
                       <span class="ml-1 float-right">
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          width="16"
-                          height="16"
-                          fill="currentColor"
-                          class="bi bi-clock"
-                          viewBox="0 0 16 16"
-                        >
-                          <path
-                            d="M8 3.5a.5.5 0 0 0-1 0V9a.5.5 0 0 0 .252.434l3.5 2a.5.5 0 0 0 .496-.868L8 8.71V3.5z"
-                          />
-                          <path
-                            d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16zm7-8A7 7 0 1 1 1 8a7 7 0 0 1 14 0z"
-                          />
-                        </svg>
-                        {{ formatDate(element.deadline) }}
+                        <ClockIcon />
+                        {{ formatDate(task.deadline) }}
                       </span>
                     </div>
                   </div>
@@ -223,15 +262,33 @@
 <script>
 import { format } from "date-fns";
 import draggable from "vuedraggable";
+import ClockIcon from "../components/icons/Clock";
+import PlusIcon from "../components/icons/Plus";
+import RemoveIcon from "../components/icons/Remove";
+import { PROJECT_ADD, TASK_ADD, TASK_DELETE } from "@/store/mutations.types";
 
 export default {
   name: "TaskBoard",
   components: {
     draggable,
+    ClockIcon,
+    PlusIcon,
+    RemoveIcon,
   },
   methods: {
-    formatDate: function (date) {
+    formatDate(date) {
       return format(new Date(date), "MMM dd");
+    },
+    handleAddProject(text) {
+      this.$store.commit(PROJECT_ADD, { name: text });
+    },
+    handleAddTask(task) {
+      var projectId = this.selectedProject;
+      this.$store.commit(TASK_ADD, { projectId, ...this.newTask });
+    },
+    handleDeleteTask(taskId) {
+      var projectId = this.selectedProject;
+      this.$store.commit(TASK_DELETE, { projectId, taskId });
     },
   },
   props: {
@@ -240,14 +297,20 @@ export default {
   data() {
     return {
       format,
-      newTask: "",
-      // 4 arrays to keep track of our 4 statuses
+      selectedProject: {},
+      newTask: {
+        name: "",
+        notes: "",
+        importance: "",
+        urgency: "",
+        deadline: Date.now(),
+        assignee: null,
+      },
     };
   },
 };
 </script>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
 h1,
 h2 {
@@ -263,5 +326,11 @@ li {
 }
 a {
   color: #42b983;
+}
+.icon {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  padding-left: 5px;
 }
 </style>

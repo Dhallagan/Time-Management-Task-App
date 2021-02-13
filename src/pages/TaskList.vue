@@ -25,59 +25,45 @@
           <td>{{ project.project }}</td>
           <td>{{ project.task }}</td>
           <td>{{ project.assignee }}</td>
-          <td :class="classStatus(project.status)">{{ project.status }}</td>
-          <td :class="classOrder(project.urgency)">{{ project.urgency }}</td>
-          <td :class="classOrder(project.priority)">{{ project.priority }}</td>
+          <td class="priority-cell" :class="classStatus(project.status)">
+            {{ project.status }}
+          </td>
+          <td class="priority-cell" :class="classOrder(project.urgency)">
+            {{ project.urgency }}
+          </td>
+          <td :class="classOrder(project.importance)">
+            {{ project.importance }}
+          </td>
           <td>{{ format(new Date(project.deadline), "MMM dd") }}</td>
         </tr>
       </tbody>
     </table>
-    <!-- <div class="row mt-5" v-for="project in projects" :key="project.name">
-      <div class="col-12 border-bottom">
-        <h2>{{ project.name }}</h2>
-
-        <div class="row mt-5 ml-5">
-          <div class="col-3">
-            <div class="p-2 alert alert-secondary">
-              <h3>Back Log</h3>
-
-              <div
-                class="list-group kanban-column"
-                :list="project.arrBackLog"
-                group="tasks"
-              >
-                <div
-                  class="list-group-item"
-                  v-for="backlog in project.arrBackLog"
-                  :key="backlog.name"
-                >
-                  {{ backlog.name }}
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div> -->
   </div>
 </template>
 
 <script>
 import { format } from "date-fns";
+import { projectsAsList } from "@/helpers/projects.helpers";
 export default {
-  name: "TaskBoard",
+  name: "TaskList",
   props: {
-    projects: Array,
+    projects: {
+      type: Array,
+      default() {
+        return [];
+      },
+    },
   },
+
   methods: {
-    classOrder: function (flag) {
+    classOrder(flag) {
       var bgColor = "";
       if (flag === "Urgent" || flag === "Important") {
         bgColor = "bg-danger font-weight-bold text-light";
       }
       return bgColor;
     },
-    classStatus: function (status) {
+    classStatus(status) {
       var bgColor = "";
       switch (status) {
         case "Completed":
@@ -99,178 +85,8 @@ export default {
       }
       return bgColor;
     },
-    //add new tasks method
-    projectsListView: function () {
-      var listView = [];
-
-      var arrUI = [];
-      var arrUNI = [];
-      var arrNUI = [];
-      var arrNUNI = [];
-
-      this.projects.forEach((project) => {
-        project.arrBackLog.forEach((task) => {
-          var item = {
-            project: "",
-            task: "",
-            priority: "",
-            urgency: "",
-            deadline: "",
-            status: "",
-            assignee: "",
-          };
-          item.project = project.name;
-          item.task = task.name;
-          item.priority = task.priority;
-          item.urgency = task.urgency;
-          item.deadline = task.deadline;
-          item.status = "Backlog";
-          item.assignee = task.assignee;
-
-          //listView.push(item);
-          if (item.urgency === "Urgent" && item.priority === "Important") {
-            arrUI.push(item);
-          }
-          if (item.urgency === "Urgent" && item.priority === "Not Important") {
-            arrUNI.push(item);
-          }
-          if (item.urgency === "Not Urgent" && item.priority === "Important") {
-            arrNUI.push(item);
-          }
-          if (
-            item.urgency === "Not Urgent" &&
-            item.priority === "Not Important"
-          ) {
-            arrNUNI.push(item);
-          }
-        });
-
-        project.arrInProgress.forEach((task) => {
-          var item = {
-            project: "",
-            task: "",
-            priority: "",
-            urgency: "",
-            deadline: "",
-            status: "",
-            assignee: "",
-          };
-          item.project = project.name;
-          item.task = task.name;
-          item.priority = task.priority;
-          item.urgency = task.urgency;
-          item.deadline = task.deadline;
-          item.status = "In Progress";
-          item.assignee = task.assignee;
-
-          //listView.push(item);
-          if (item.urgency === "Urgent" && item.priority === "Important") {
-            arrUI.push(item);
-          }
-          if (item.urgency === "Urgent" && item.priority === "Not Important") {
-            arrUNI.push(item);
-          }
-          if (item.urgency === "Not Urgent" && item.priority === "Important") {
-            arrNUI.push(item);
-          }
-          if (
-            item.urgency === "Not Urgent" &&
-            item.priority === "Not Important"
-          ) {
-            arrNUNI.push(item);
-          }
-        });
-
-        project.arrNeedHelp.forEach((task) => {
-          var item = {
-            project: "",
-            task: "",
-            priority: "",
-            urgency: "",
-            deadline: "",
-            status: "",
-            assignee: "",
-          };
-          item.project = project.name;
-          item.task = task.name;
-          item.priority = task.priority;
-          item.urgency = task.urgency;
-          item.deadline = task.deadline;
-          item.status = "Stuck";
-          item.assignee = task.assignee;
-
-          //listView.push(item);
-          if (item.urgency === "Urgent" && item.priority === "Important") {
-            arrUI.push(item);
-          }
-          if (item.urgency === "Urgent" && item.priority === "Not Important") {
-            arrUNI.push(item);
-          }
-          if (item.urgency === "Not Urgent" && item.priority === "Important") {
-            arrNUI.push(item);
-          }
-          if (
-            item.urgency === "Not Urgent" &&
-            item.priority === "Not Important"
-          ) {
-            arrNUNI.push(item);
-          }
-        });
-
-        project.arrDone.forEach((task) => {
-          var item = {
-            project: "",
-            task: "",
-            priority: "",
-            urgency: "",
-            deadline: "",
-            status: "",
-            assignee: "",
-          };
-          item.project = project.name;
-          item.task = task.name;
-          item.priority = task.priority;
-          item.urgency = task.urgency;
-          item.deadline = task.deadline;
-          item.status = "Completed";
-          item.assignee = task.assignee;
-
-          if (item.urgency === "Urgent" && item.priority === "Important") {
-            arrUI.push(item);
-          }
-          if (item.urgency === "Urgent" && item.priority === "Not Important") {
-            arrUNI.push(item);
-          }
-          if (item.urgency === "Not Urgent" && item.priority === "Important") {
-            arrNUI.push(item);
-          }
-          if (
-            item.urgency === "Not Urgent" &&
-            item.priority === "Not Important"
-          ) {
-            arrNUNI.push(item);
-          }
-        });
-      });
-
-      arrUI.sort(function (a, b) {
-        return new Date(a.deadline) - new Date(b.deadline);
-      });
-
-      arrUNI.sort(function (a, b) {
-        return new Date(a.deadline) - new Date(b.deadline);
-      });
-
-      arrNUI.sort(function (a, b) {
-        return new Date(a.deadline) - new Date(b.deadline);
-      });
-
-      arrNUNI.sort(function (a, b) {
-        return new Date(a.deadline) - new Date(b.deadline);
-      });
-
-      listView = listView.concat(arrUI, arrUNI, arrNUI, arrNUNI);
-      return listView;
+    projectsListView() {
+      return projectsAsList(this.projects);
     },
   },
   data() {
@@ -298,5 +114,8 @@ li {
 }
 a {
   color: #42b983;
+}
+.priority-cell {
+  border-right: 1px solid #dee2e6;
 }
 </style>
